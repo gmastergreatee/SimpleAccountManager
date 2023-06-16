@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="assets/css/padding.css">
     <link rel="stylesheet" href="assets/css/position.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
-    
+
     <script src="assets/js/vue.js"></script>
     <script src="assets/js/jquery.min.js"></script>
 
@@ -44,7 +44,9 @@
             <!-- Party -->
             <div :class="{'d-none': tabIndex != 1}" class="df fr h-100">
                 <div class="df fc br-1 wp-200">
-                    <a href="#" class="p-2 tc bb-1" @click="setTabIndex(3, true)">Add Party</a>
+                    <div class="p-2 tc bb-1">
+                        <a href="#" @click="setTabIndex(3, true)">Add Party</a>
+                    </div>
                     <div class="df fr jcsb p-2 bb-1">
                         <div>Name</div>
                         <div class="pl-2">Balance</div>
@@ -73,7 +75,9 @@
             <!-- Items -->
             <div :class="{'d-none': tabIndex != 2}" class="df fr h-100">
                 <div class="df fc br-1 wp-200">
-                    <a href="#" class="p-2 tc bb-1" @click="setTabIndex(4, true)">Add Item</a>
+                    <div class="p-2 tc bb-1">
+                        <a href="#" @click="setTabIndex(4, true)">Add Item</a>
+                    </div>
                     <div class="df fr jcsb p-2 bb-1">
                         <div>Name</div>
                         <div class="pl-2">Pricing</div>
