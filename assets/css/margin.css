@@ -1,0 +1,51 @@
+.m-0 {
+    margin: 0;
+}
+
+.ml-1,
+.mx-1,
+.m-1 {
+    margin-left: 4px;
+}
+
+.mr-1,
+.mx-1,
+.m-1 {
+    margin-right: 4px;
+}
+
+.mt-1,
+.my-1,
+.m-1 {
+    margin-top: 4px;
+}
+
+.mb-1,
+.my-1,
+.m-1 {
+    margin-bottom: 4px;
+}
+
+.ml-2,
+.mx-2,
+.m-2 {
+    margin-left: 8px;
+}
+
+.mr-2,
+.mx-2,
+.m-2 {
+    margin-right: 8px;
+}
+
+.mt-2,
+.my-2,
+.m-2 {
+    margin-top: 8px;
+}
+
+.mb-2,
+.my-2,
+.m-2 {
+    margin-bottom: 8px;
+}

@@ -1,0 +1,28 @@
+.tl {
+    text-align: left;
+}
+
+.tc {
+    text-align: center;
+}
+
+.tr {
+    text-align: right;
+}
+
+input,
+textarea {
+    padding: 4px;
+}
+
+textarea {
+    resize: none;
+}
+
+.toe {
+    text-overflow: ellipsis;
+}
+
+.wsnw {
+    white-space: nowrap;
+}

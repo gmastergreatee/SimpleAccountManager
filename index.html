@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100 w-100 m-0 usn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Accounting</title>
+    <link rel="stylesheet" href="/assets/css/scroll.css">
+    <link rel="stylesheet" href="assets/css/display.css">
+    <link rel="stylesheet" href="assets/css/border.css">
+    <link rel="stylesheet" href="assets/css/input.css">
+    <link rel="stylesheet" href="assets/css/margin.css">
+    <link rel="stylesheet" href="assets/css/padding.css">
+    <link rel="stylesheet" href="assets/css/position.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    
+    <script src="assets/js/vue.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+
+    <script type="module" src="assets/js/party.js" defer></script>
+    <script type="module" src="assets/js/transaction.js" defer></script>
+    <script type="module" src="assets/js/item.js" defer></script>
+    <script type="module" src="assets/js/script.js" defer></script>
+</head>
+
+<body class="w-100 h-100 m-0">
+    <div id="vuejify" class="df fr h-100" v-cloak>
+        <!-- Sidebar -->
+        <div class="df fc br-1" :class="{'d-none': fullscreenView}">
+            <div class="header p-2 bb-1">SK Albums</div>
+            <a href="#" v-for="(m,i) in menus" class="p-2 bb-1" @click="setTabIndex(i)"
+                :class="{'cy': tabIndex == i}">{{ m }}</a>
+        </div>
+        <!-- Main Content -->
+        <div class="f1 df fc">
+            <div class="p-2 bb-1" :class="{'d-none': fullscreenView}">
+                <a href="#">Add Sale</a>
+            </div>
+            <!-- Home -->
+            <div :class="{'d-none': tabIndex != 0}" class="df fr h-100">
+                Home View
+            </div>
+            <!-- Party -->
+            <div :class="{'d-none': tabIndex != 1}" class="df fr h-100">
+                <div class="df fc br-1 wp-200">
+                    <a href="#" class="p-2 tc bb-1" @click="setTabIndex(3, true)">Add Party</a>
+                    <div class="df fr jcsb p-2 bb-1">
+                        <div>Name</div>
+                        <div class="pl-2">Balance</div>
+                    </div>
+                    <div class="df f1 fc pr">
+                        <div class="pa h-100 w-100 scroller df f1 fc">
+                            <a href="#" v-for="party in parties" class="df fr jcsb p-2 bb-1"
+                                :class="{'cy': selectedParty == party }" @click="selectParty(party)">
+                                <div class="wsnw oh toe">{{ party.name }}</div>
+                                <div class="pl-2">{{ party.formattedBalance }}</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="selectedParty" class="df f1 fc">
+                    <div class="df fc pt-2 px-2">
+                        <div><b>Name :</b> {{ selectedParty.name }}</div>
+                        <div><b>Phone :</b> {{ selectedParty.phone }}</div>
+                        <div class="bb-1 pb-2"><b>Email Id :</b> {{ selectedParty.email }}</div>
+                    </div>
+                    <div class="df f1 fc p-2">
+                        <h3 class="m-0 bb-1 pb-2">Transactions</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Items -->
+            <div :class="{'d-none': tabIndex != 2}" class="df fr h-100">
+                <div class="df fc br-1">
+                    <a href="#" class="p-2 tc bb-1" @click="setTabIndex(4, true)">Add Item</a>
+                    <a href="#" v-for="item in items" class="df fr jcsb p-2 bb-1" :class="{'cy': selectedItem == item }"
+                        @click="selectItem(item)">
+                        <div>{{ item.name }}</div>
+                        <div class="pl-2">{{ item.formattedPrice }}</div>
+                    </a>
+                </div>
+
+            </div>
+            <!-- Add/Edit Party -->
+            <div :class="{'d-none': tabIndex != 3}" class="df fc h-100">
+                <div class="df fr jcsb bb-1">
+                    <h3 class="m-0 p-2">{{ newParty.id == 0 ? 'Add' : 'Edit' }} Party</h3>
+                    <a href="#" class="p-2" @click="backClick()">Back</a>
+                </div>
+                <div class="df fr py-2 bb-1">
+                    <div>
+                        <span class="pl-2">Name :</span>
+                        <input v-model="newParty.name" :class="{ 'br': newParty.name == ''}" type="text"
+                            placeholder="Party Name" />
+                    </div>
+                    <div>
+                        <span class="pl-2">Phone :</span>
+                        <input v-model="newParty.phone" :class="{ 'br': newParty.phone.length != 10}" type="text"
+                            class="numeric" maxlength="10" placeholder="Phone Number" />
+                    </div>
+                </div>
+                <div class="f1 df fr bb-1">
+                    <div class="df fc p-2">
+                        <div>State</div>
+                        <input v-model="newParty.state" :class="{ 'br': newParty.state == ''}" class="mt-1 mb-2"
+                            type="text" placeholder="State" />
+                        <div>Email</div>
+                        <input v-model="newParty.email" :class="{ 'br': newParty.email == ''}" class="mt-1 mb-2"
+                            type="text" placeholder="Email ID" />
+                    </div>
+                    <div class="p-2 f1 df fc">
+                        <div class="pb-1">Address</div>
+                        <textarea v-model="newParty.address" :class="{ 'br': newParty.address == ''}" class="f1"
+                            placeholder="Billing Address"></textarea>
+                    </div>
+                </div>
+                <div class="df fr jce">
+                    <a href="#" class="p-2" @click="saveParty()">Save</a>
+                </div>
+            </div>
+            <!-- Add/Edit Items -->
+            <div :class="{'d-none': tabIndex != 4}" class="df fc h-100">
+                <div class="df fr jcsb bb-1">
+                    <h3 class="m-0 p-2">{{ newItem.id == 0 ? 'Add' : 'Edit' }} Item</h3>
+                    <a href="#" class="p-2" @click="backClick()">Back</a>
+                </div>
+                <div class="df f1 fr py-2 bb-1">
+                    <div>
+                        <span class="pl-2">Name :</span>
+                        <input v-model="newItem.name" :class="{ 'br': newItem.name.trim() == ''}" type="text"
+                            placeholder="Item Name" />
+                    </div>
+                    <div>
+                        <span class="pl-2">Price :</span>
+                        <input v-model="newItem.price"
+                            :class="{ 'br': !newItem.price.toString().trim() || parseInt(newItem.price) <= 0}"
+                            type="text" class="numeric" maxlength="10" placeholder="Item Price" />
+                    </div>
+                </div>
+                <div class="df fr jce">
+                    <a href="#" class="p-2" @click="saveItem()">Save</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

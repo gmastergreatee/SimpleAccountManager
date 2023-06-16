@@ -1,0 +1,33 @@
+
+.df {
+    display: flex;
+}
+
+.d-none,
+[v-cloak] {
+    display: none;
+}
+
+.fr {
+    flex-direction: row;
+}
+
+.fc {
+    flex-direction: column;
+}
+
+.f1 {
+    flex: 1;
+}
+
+.jcc {
+    justify-content: center;
+}
+
+.jcsb {
+    justify-content: space-between;
+}
+
+.jce {
+    justify-content: end;
+}

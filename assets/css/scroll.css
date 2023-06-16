@@ -1,0 +1,7 @@
+.scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.scroller {
+    overflow-y: auto;
+}

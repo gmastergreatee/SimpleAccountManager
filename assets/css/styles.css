@@ -1,0 +1,40 @@
+.usn {
+    user-select: none;
+}
+
+/* Utils */
+
+html,
+body {
+    height: 100vh;
+    width: 100vw;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.br {
+    border: 2px solid red;
+}
+
+.cy {
+    color: yellow;
+}
+
+.wp-200 {
+    width: 200px;
+}
+
+.oh {
+    overflow: hidden;
+}
+
