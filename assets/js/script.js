@@ -51,7 +51,9 @@ let app = new Vue({
             if (!this.newParty.IsValid) {
                 return;
             }
-            this.newParty.id = Party.GetMaxId;
+            if (!this.newParty.id) {
+                this.newParty.id = Party.GetMaxId;
+            }
             this.parties.push(this.newParty);
             this.newParty = new Party();
             Store.setData('parties', JSON.stringify(this.parties));
@@ -67,7 +69,9 @@ let app = new Vue({
             if (!this.newItem.IsValid) {
                 return;
             }
-            this.newItem.id = Item.GetMaxId;
+            if (!this.newItem.id) {
+                this.newItem.id = Item.GetMaxId;
+            }
             this.newItem.price = parseFloat(this.newItem.price);
             this.items.push(this.newItem);
             this.newItem = new Item();
@@ -82,7 +86,7 @@ let app = new Vue({
 
     },
     computed: {
-        
+
     },
     mounted() {
         let items = JSON.parse(Store.getData('items'));
