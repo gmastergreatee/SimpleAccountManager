@@ -35,7 +35,7 @@
         <!-- Main Content -->
         <div class="f1 df fc">
             <div class="p-2 bb-1" :class="{'d-none': fullscreenView}">
-                <a href="#">Add Sale</a>
+                <a href="#" @click="setTabIndex(5, true)">Add Sale</a>
             </div>
             <!-- Home -->
             <div :class="{'d-none': tabIndex != 0}" class="df fr h-100">
@@ -72,13 +72,21 @@
             </div>
             <!-- Items -->
             <div :class="{'d-none': tabIndex != 2}" class="df fr h-100">
-                <div class="df fc br-1">
+                <div class="df fc br-1 wp-200">
                     <a href="#" class="p-2 tc bb-1" @click="setTabIndex(4, true)">Add Item</a>
-                    <a href="#" v-for="item in items" class="df fr jcsb p-2 bb-1" :class="{'cy': selectedItem == item }"
-                        @click="selectItem(item)">
-                        <div>{{ item.name }}</div>
-                        <div class="pl-2">{{ item.formattedPrice }}</div>
-                    </a>
+                    <div class="df fr jcsb p-2 bb-1">
+                        <div>Name</div>
+                        <div class="pl-2">Pricing</div>
+                    </div>
+                    <div class="df f1 fc pr">
+                        <div class="pa h-100 w-100 scroller df f1 fc">
+                            <a href="#" v-for="item in items" class="df fr jcsb p-2 bb-1"
+                                :class="{'cy': selectedItem == item }" @click="selectItem(item)">
+                                <div class="wsnw oh toe">{{ item.name }}</div>
+                                <div class="pl-2">{{ item.formattedPrice }}</div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -121,6 +129,29 @@
             </div>
             <!-- Add/Edit Items -->
             <div :class="{'d-none': tabIndex != 4}" class="df fc h-100">
+                <div class="df fr jcsb bb-1">
+                    <h3 class="m-0 p-2">{{ newItem.id == 0 ? 'Add' : 'Edit' }} Item</h3>
+                    <a href="#" class="p-2" @click="backClick()">Back</a>
+                </div>
+                <div class="df f1 fr py-2 bb-1">
+                    <div>
+                        <span class="pl-2">Name :</span>
+                        <input v-model="newItem.name" :class="{ 'br': newItem.name.trim() == ''}" type="text"
+                            placeholder="Item Name" />
+                    </div>
+                    <div>
+                        <span class="pl-2">Price :</span>
+                        <input v-model="newItem.price"
+                            :class="{ 'br': !newItem.price.toString().trim() || parseInt(newItem.price) <= 0}"
+                            type="text" class="numeric" maxlength="10" placeholder="Item Price" />
+                    </div>
+                </div>
+                <div class="df fr jce">
+                    <a href="#" class="p-2" @click="saveItem()">Save</a>
+                </div>
+            </div>
+            <!-- Add Sale -->
+            <div :class="{'d-none': tabIndex != 5}" class="df fc h-100">
                 <div class="df fr jcsb bb-1">
                     <h3 class="m-0 p-2">{{ newItem.id == 0 ? 'Add' : 'Edit' }} Item</h3>
                     <a href="#" class="p-2" @click="backClick()">Back</a>
