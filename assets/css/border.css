@@ -5,3 +5,7 @@
 .br-1 {
     border-right: 1px solid black;
 }
+
+.br-4 {
+    border-right: 4px solid black;
+}

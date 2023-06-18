@@ -10,6 +10,10 @@ body {
     width: 100vw;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 .w-100 {
     width: 100%;
 }
@@ -30,6 +34,18 @@ a {
     color: yellow;
 }
 
+.wp-1 {
+    width: 1px;
+}
+
+.wp-62 {
+    width: 62px;
+}
+
+.wp-60 {
+    width: 60px;
+}
+
 .wp-200 {
     width: 200px;
 }
@@ -37,4 +53,3 @@ a {
 .oh {
     overflow: hidden;
 }
-

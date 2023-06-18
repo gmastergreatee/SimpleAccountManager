@@ -11,7 +11,7 @@ export class BaseClass {
         }
         return [];
     }
-    static get GetMaxId() {
+    static get GetId() {
         return crypto.randomUUID();
     }
 }

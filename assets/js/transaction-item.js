@@ -16,4 +16,26 @@ export class TransactionItem extends BaseClass {
         }
         return transactionItemCopy;
     }
+
+    /**
+     * Create empty {TransactionItem} from an {Item} object
+     * @param {Item} item 
+     */
+    static createFrom(item) {
+        let transactionItem = new TransactionItem();
+        transactionItem.item = Item.CopyFrom(item);
+        transactionItem.quantity = 0;
+        return transactionItem;
+    }
+
+    get total() {
+        if (this.quantity.toString().trim() == ''){
+            return 0;
+        }
+        return this.item.price * (parseInt(this.quantity));
+    }
+
+    get formattedTotal() {
+        return `₹ ${this.total.toFixed(2)}`;
+    }
 }

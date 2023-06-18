@@ -157,24 +157,140 @@
             <!-- Add Sale -->
             <div :class="{'d-none': tabIndex != 5}" class="df fc h-100">
                 <div class="df fr jcsb bb-1">
-                    <h3 class="m-0 p-2">{{ newItem.id == 0 ? 'Add' : 'Edit' }} Item</h3>
+                    <h3 class="m-0 p-2">Add Sale</h3>
                     <a href="#" class="p-2" @click="backClick()">Back</a>
                 </div>
-                <div class="df f1 fr py-2 bb-1">
-                    <div>
-                        <span class="pl-2">Name :</span>
-                        <input v-model="newItem.name" :class="{ 'br': newItem.name.trim() == ''}" type="text"
-                            placeholder="Item Name" />
+                <div class="df f1 fc bb-1">
+                    <!-- Party Selector -->
+                    <div v-if="selectedPartyForAddSale == null" class="df fc px-2">
+                        <div v-for="party in parties" class="p-2 bb-1 df fr jcsb">
+                            <span>{{ party.name }}</span>
+                            <a href="#" @click="selectPartyForAddSale(party)">Select</a>
+                        </div>
                     </div>
-                    <div>
-                        <span class="pl-2">Price :</span>
-                        <input v-model="newItem.price"
-                            :class="{ 'br': !newItem.price.toString().trim() || parseInt(newItem.price) <= 0}"
-                            type="text" class="numeric" maxlength="10" placeholder="Item Price" />
+                    <div v-if="selectedPartyForAddSale != null" class="df fc f1">
+                        <div class="df fr f1">
+                            <div class="df fc f1 br-4">
+                                <!-- Party Info -->
+                                <div class="df fr jcsb p-2 bb-1">
+                                    <div class="df fc">
+                                        <div>
+                                            <b>Name :</b>
+                                            <span>{{ selectedPartyForAddSale.name }}</span>
+                                        </div>
+                                        <div>
+                                            <b>Phone :</b>
+                                            <span>{{ selectedPartyForAddSale.phone }}</span>
+                                        </div>
+                                        <div>
+                                            <b>Email :</b>
+                                            <span>{{ selectedPartyForAddSale.email }}</span>
+                                        </div>
+                                        <div>
+                                            <b>Address :</b>
+                                            <span>{{ selectedPartyForAddSale.address }}</span>
+                                        </div>
+                                        <div>
+                                            <b>Balance :</b>
+                                            <span>{{ selectedPartyForAddSale.balance }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="df fc">
+                                        <div class="tr">
+                                            <a href="#" @click="reselectPartyForAddSale()">Re-select</a>
+                                        </div>
+                                        <div>
+                                            <b>Date :</b>
+                                            <input type="date" v-model="dateForAddSale" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Items Selector -->
+                                <div class="df fr f1">
+                                    <!-- Selected Item List -->
+                                    <div class="df fc f1">
+                                        <table v-if="itemsForAddSale.length > 0" class="w-100" cellpadding="0"
+                                            cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="bb-1 p-2 br-1 wsnw wp-1">S.N.</th>
+                                                    <th class="bb-1 p-2 tl br-1">Name</th>
+                                                    <th class="bb-1 p-2 tr br-1 wsnw wp-1">Pricing</th>
+                                                    <th class="bb-1 p-2 tr br-1 wsnw wp-1">Quantity</th>
+                                                    <th class="bb-1 p-2 tr br-1 wsnw wp-1">Total</th>
+                                                    <th class="bb-1 wp-1">&times;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(transactionItem, i) in itemsForAddSale">
+                                                    <td class="p-2 tr bb-1 br-1">{{ i + 1 }}.</td>
+                                                    <td class="p-2 bb-1 br-1">{{ transactionItem.item.name }}</td>
+                                                    <td class="tr bb-1 br-1">
+                                                        <input class="w-100 p-2" v-model="transactionItem.item.price"
+                                                            maxlength="8" />
+                                                    </td>
+                                                    <td class=" bb-1 br-1">
+                                                        <input type="text" class="numeric w-100 p-2"
+                                                            v-model="transactionItem.quantity" maxlength="4" />
+                                                    </td>
+                                                    <td class="p-2 wsnw bb-1 tr br-1">{{ transactionItem.formattedTotal }}
+                                                    </td>
+                                                    <th class="bb-1 p-2">
+                                                        <a href="#" @click="removeItemFromSale(transactionItem)">&times;</a>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Total</th>
+                                                    <th class="bb-1 p-2 tr br-1">{{ totalForAddSaleFormatted }}</th>
+                                                    <th class="bb-1"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Received</th>
+                                                    <th class="bb-1 tr">
+                                                        <input class="numeric w-60 tr p-2 br-1"
+                                                            v-model="receivedAmountForSale"
+                                                            @input="receivedAmountForSale_Changed" maxlength="8" />
+                                                    </th>
+                                                    <th class="bb-1"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Due</th>
+                                                    <th class="bb-1 p-2 tr br-1">
+                                                        {{ dueForAddSale }}
+                                                    </th>
+                                                    <th class="bb-1"></th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Items Selection -->
+                            <div class="df fc wp-200">
+                                <div class="df fr jcsb p-2 bb-1">
+                                    <div>Name</div>
+                                    <div class="pl-2">Pricing</div>
+                                </div>
+                                <div class="df f1 fc pr">
+                                    <div class="pa h-100 w-100 scroller df f1 fc">
+                                        <a href="#" v-for="item in items" class="df fr jcsb p-2 bb-1"
+                                            :class="{'cy': selectedItem == item }" @click="selectItemForAddSale(item)">
+                                            <div class="wsnw oh toe">{{ item.name }}</div>
+                                            <div class="pl-2">{{ item.formattedPrice }}</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="df fr jce">
-                    <a href="#" class="p-2" @click="saveItem()">Save</a>
+                    <a v-if="itemsForAddSale.length > 0 && totalForAddSale > 0 && parseFloat(receivedAmountForSale) > 0 && dateForAddSale != ''"
+                         href="#" class="p-2" @click="generateSaleReceipt">Generate</a>
                 </div>
             </div>
         </div>
