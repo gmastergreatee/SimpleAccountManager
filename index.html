@@ -169,7 +169,7 @@
                             <a href="#" @click="selectPartyForAddSale(party)">Select</a>
                         </div>
                     </div>
-                    <div v-if="selectedPartyForAddSale != null" class="df fc f1">
+                    <div v-else class="df fc f1">
                         <div class="df fr f1">
                             <div class="df fc f1 br-4">
                                 <!-- Party Info -->
@@ -219,7 +219,7 @@
                                                     <th class="bb-1 p-2 tr br-1 wsnw wp-1">Pricing</th>
                                                     <th class="bb-1 p-2 tr br-1 wsnw wp-1">Quantity</th>
                                                     <th class="bb-1 p-2 tr br-1 wsnw wp-1">Total</th>
-                                                    <th class="bb-1 wp-1">&times;</th>
+                                                    <th class="bb-1 wp-1"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -265,6 +265,7 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                        <div v-else class="tc p-2">Please select at least one item</div>
                                     </div>
                                 </div>
                             </div>

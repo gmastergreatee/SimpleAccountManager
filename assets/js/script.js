@@ -107,6 +107,10 @@ let app = new Vue({
         addSaleInit() {
             let today = new Date();
             this.dateForAddSale = `${today.getFullYear()}-${padLeft((today.getMonth() + 1).toString(), 2, '0')}-${padLeft(today.getDate().toString(), 2, '0')}`
+            this.selectedPartyForAddSale = null;
+            this.itemsForAddSale = [];
+            this.receivedAmountForSale = 0;
+            this.dateForAddSale = '';
         },
         selectPartyForAddSale(party) {
             this.selectedPartyForAddSale = party;
@@ -146,12 +150,6 @@ let app = new Vue({
             console.log(transaction);
             this.transactions.push(transaction);
             Store.setData('transactions', JSON.stringify(this.transactions));
-
-            this.selectedPartyForAddSale = null;
-            this.itemsForAddSale = [];
-            this.receivedAmountForSale = 0;
-            this.dateForAddSale = '';
-
             this.backClick();
         },
         //#endregion
