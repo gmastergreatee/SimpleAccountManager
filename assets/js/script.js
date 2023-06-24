@@ -3,6 +3,9 @@ import { Party } from './party.js';
 import { Transaction } from './transaction.js';
 import * as Store from './localstore.js';
 import { TransactionItem } from './transaction-item.js';
+import { Utils } from './utils.js';
+
+let debugMode = true;
 
 // vuejs logic
 let app = new Vue({
@@ -17,7 +20,6 @@ let app = new Vue({
 
             newParty: new Party(),
             newItem: new Item(),
-            newTransaction: new Transaction(),
 
             items: [],
             selectedItem: null,
@@ -26,10 +28,11 @@ let app = new Vue({
             selectedParty: null,
 
             transactions: [],
+            nextTransactionId: 1,
 
-            tabIndex: 5,
+            tabIndex: 0,
             majorTabIndex: 0,
-            fullscreenView: true,
+            fullscreenView: false,
 
             selectedPartyForAddSale: null,
             itemsForAddSale: [],
@@ -39,13 +42,8 @@ let app = new Vue({
     },
     methods: {
         debugCode() {
-            this.selectedPartyForAddSale = this.parties[0];
-            this.itemsForAddSale.push(
-                TransactionItem.createFrom(this.items[0])
-            );
-            this.itemsForAddSale.push(
-                TransactionItem.createFrom(this.items[1])
-            );
+            this.tabIndex = 1;
+            this.selectedParty = this.parties[0];
         },
         setTabIndex(index, fs = false) {
             if (fs) {
@@ -106,11 +104,10 @@ let app = new Vue({
         //#region Sale related
         addSaleInit() {
             let today = new Date();
-            this.dateForAddSale = `${today.getFullYear()}-${padLeft((today.getMonth() + 1).toString(), 2, '0')}-${padLeft(today.getDate().toString(), 2, '0')}`
+            this.dateForAddSale = `${today.getFullYear()}-${Utils.PadLeft((today.getMonth() + 1).toString(), 2, '0')}-${Utils.PadLeft(today.getDate().toString(), 2, '0')}`
             this.selectedPartyForAddSale = null;
             this.itemsForAddSale = [];
             this.receivedAmountForSale = 0;
-            this.dateForAddSale = '';
         },
         selectPartyForAddSale(party) {
             this.selectedPartyForAddSale = party;
@@ -127,7 +124,7 @@ let app = new Vue({
         receivedAmountForSale_Changed() {
             let recAmt = parseFloat(this.receivedAmountForSale);
             if (this.totalForAddSale < recAmt) {
-                this.receivedAmountForSale = this.totalForAddSale;
+                this.receivedAmountForSale = this.totalForAddSale.toFixed(2);
             }
         },
         removeItemFromSale(item) {
@@ -135,21 +132,24 @@ let app = new Vue({
             this.itemsForAddSale.splice(index, 1);
         },
         generateSaleReceipt() {
-            let transactionNo = this.transactions.length <= 0 ? 0 : Math.max(this.transactions.reduce(i => i.number), 0);
-            if (isNaN(transactionNo)) {
-                transactionNo = 0;
-            }
             let transaction = Transaction.From(
                 this.dateForAddSale,
                 this.selectedPartyForAddSale,
                 this.itemsForAddSale,
-                this.receivedAmountForSale,
+                parseFloat(this.receivedAmountForSale),
                 'Sale',
-                transactionNo + 1,
+                this.nextTransactionId,
             );
+            this.selectedPartyForAddSale.balance = transaction.party.balance;
             console.log(transaction);
             this.transactions.push(transaction);
+            this.nextTransactionId++;
             Store.setData('transactions', JSON.stringify(this.transactions));
+            Store.setData('parties', JSON.stringify(this.parties));
+
+            this.majorTabIndex = 1;
+            this.selectedParty = this.selectedPartyForAddSale;
+
             this.backClick();
         },
         //#endregion
@@ -165,6 +165,21 @@ let app = new Vue({
             let recAmt = parseFloat(this.receivedAmountForSale);
             return `₹ ${isNaN(recAmt) ? 0 : (this.totalForAddSale - recAmt)}`;
         },
+        showGenerateSaleButton() {
+            return this.itemsForAddSale.length > 0 &&
+                this.totalForAddSale > 0 &&
+                parseFloat(
+                    this.receivedAmountForSale.length == 0
+                        ? 0 : this.receivedAmountForSale
+                ) >= 0 &&
+                this.dateForAddSale != '';
+        },
+        transactionsForSelectedParty() {
+            if (!this.selectedParty) {
+                return [];
+            }
+            return this.transactions.filter(i => i.party.id == this.selectedParty.id);
+        },
     },
     mounted() {
         let items = JSON.parse(Store.getData('items'));
@@ -176,7 +191,16 @@ let app = new Vue({
         let transactions = JSON.parse(Store.getData('transactions'));
         this.transactions = Transaction.CopyAllFrom(transactions);
 
-        this.debugCode();
+        if (this.transactions.length > 0) {
+            this.nextTransactionId = this.transactions.reduce((a, b) => {
+                if (a > b.number) return a;
+                return b.number;
+            }, 0) + 1;
+        }
+
+        if (debugMode) {
+            this.debugCode();
+        }
     }
 });
 
@@ -200,12 +224,3 @@ $(document).ready(function () {
         }
     });
 });
-
-// utils
-function padLeft(text, length, char) {
-    let temp = text;
-    while (temp.length < length) {
-        temp = char + temp;
-    }
-    return temp;
-}

@@ -2,6 +2,10 @@
     margin: 0;
 }
 
+.m-auto {
+    margin: auto;
+}
+
 .ml-1,
 .mx-1,
 .m-1 {

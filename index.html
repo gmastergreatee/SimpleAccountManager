@@ -19,6 +19,7 @@
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/dom-to-image.min.js"></script>
 
+    <script type="module" src="assets/js/utils.js" defer></script>
     <script type="module" src="assets/js/party.js" defer></script>
     <script type="module" src="assets/js/transaction.js" defer></script>
     <script type="module" src="assets/js/item.js" defer></script>
@@ -70,6 +71,33 @@
                     </div>
                     <div class="df f1 fc p-2">
                         <h3 class="m-0 bb-1 pb-2">Transactions</h3>
+                        <div class="f1">
+                            <table v-if="transactionsForSelectedParty.length > 0" class="w-100" border="1" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th class="p-2 wp-1">#</th>
+                                        <th class="p-2">Date</th>
+                                        <th class="p-2">Total</th>
+                                        <th class="p-2">Paid</th>
+                                        <th class="p-2">Due</th>
+                                        <th class="p-2">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="t in transactionsForSelectedParty">
+                                        <td class="tr p-2">{{ t.number }}.</td>
+                                        <td class="p-2">{{ t.formattedDate }}</td>
+                                        <td class="tr p-2 wp-1 wsnw">{{ t.formattedTotalAmount }}</td>
+                                        <td class="tr p-2 wp-1 wsnw">{{ t.formattedPaid }}</td>
+                                        <td class="tr p-2 wp-1 wsnw">{{ t.formattedDue }}</td>
+                                        <td class="tr p-2 wp-1 wsnw">{{ t.party.formattedBalance }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-else class="tc p-2">
+                                No transactions found for the selected party
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,9 +319,13 @@
                     </div>
                 </div>
                 <div class="df fr jce">
-                    <a v-if="itemsForAddSale.length > 0 && totalForAddSale > 0 && parseFloat(receivedAmountForSale) > 0 && dateForAddSale != ''"
+                    <a v-if="showGenerateSaleButton"
                          href="#" class="p-2" @click="generateSaleReceipt">Generate</a>
                 </div>
+            </div>
+            <!-- Receipt -->
+            <div :class="{'d-none': tabIndex != 6}" class="df fc h-100">
+                
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 import { BaseClass } from "./common.js";
 import { Party } from "./party.js";
 import { TransactionItem } from "./transaction-item.js"
+import { Utils } from './utils.js';
 
 export class Transaction extends BaseClass {
     constructor() {
@@ -15,21 +16,45 @@ export class Transaction extends BaseClass {
         this.due = 0;
     }
 
+    get totalAmount() {
+        return this.items.reduce((a, b) => {
+            return a + b.item.price;
+        }, 0);
+    }
+
+    get formattedTotalAmount() {
+        return `₹ ${this.totalAmount.toFixed(2)}`;
+    }
+
+    get formattedPaid() {
+        return `₹ ${this.received.toFixed(2)}`;
+    }
+
+    get formattedDue() {
+        return `₹ ${this.due.toFixed(2)}`;
+    }
+
+    get formattedDate() {
+        let curDate = new Date(this.date);
+        return `${Utils.PadLeft(curDate.getDate(), 2, '0')}-${Utils.PadLeft(curDate.getMonth() + 1, 2, '0')}-${curDate.getFullYear()}`
+    }
+
     static From(date, party, items, received, type, receiptNo) {
         let transaction = new Transaction();
         transaction.id = this.GetId;
         transaction.type = type;
         transaction.number = receiptNo;
         transaction.date = date;
-        transaction.party = party;
-        transaction.items = items;
+        transaction.party = Party.CopyFrom(party);
+        transaction.items = TransactionItem.CopyAllFrom(items);
         transaction.received = received;
         transaction.due = items.map((a) => {
             return parseFloat(a.quantity) * parseFloat(a.item.price);
         }).reduce((a, b) => {
             a += b;
             return a;
-        }, 0);
+        }, 0) - received;
+        transaction.party.balance += transaction.due;
         return transaction;
     }
 
@@ -43,7 +68,7 @@ export class Transaction extends BaseClass {
             transactionCopy.party = Party.CopyFrom(transaction.party);
             transactionCopy.items = TransactionItem.CopyAllFrom(transaction.items);
             transactionCopy.received = transaction.received;
-            transactionCopy.due = transaction.balance;
+            transactionCopy.due = transaction.due;
         }
         return transactionCopy;
     }
