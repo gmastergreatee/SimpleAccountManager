@@ -63,19 +63,26 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="selectedParty" class="df f1 fc">
-                    <div class="df fc pt-2 px-2">
-                        <div><b>Name :</b> {{ selectedParty.name }}</div>
-                        <div><b>Phone :</b> {{ selectedParty.phone }}</div>
-                        <div class="bb-1 pb-2"><b>Email Id :</b> {{ selectedParty.email }}</div>
+                <div v-if="selectedParty" class="df f1 fc" id="party-transactions">
+                    <div class="df fr bb-1 m-2">
+                        <div class="f1 df fc">
+                            <div><b>Name :</b> {{ selectedParty.name }}</div>
+                            <div><b>Phone :</b> {{ selectedParty.phone }}</div>
+                            <div class="pb-2"><b>Email Id :</b> {{ selectedParty.email }}</div>
+                        </div>
+                        <div>
+                            <a href="#" @click="exportTransactions">Export</a>
+                        </div>
                     </div>
-                    <div class="df f1 fc p-2">
+                    <div class="df f1 fc px-2 pb-2">
                         <h3 class="m-0 bb-1 pb-2">Transactions</h3>
                         <div class="f1">
-                            <table v-if="transactionsForSelectedParty.length > 0" class="w-100" border="1" cellspacing="0" cellpadding="0">
+                            <table v-if="transactionsForSelectedParty.length > 0" class="w-100" border="1"
+                                cellspacing="0" cellpadding="0">
                                 <thead>
                                     <tr>
                                         <th class="p-2 wp-1">#</th>
+                                        <th class="p-2">Type</th>
                                         <th class="p-2">Date</th>
                                         <th class="p-2">Total</th>
                                         <th class="p-2">Paid</th>
@@ -86,6 +93,7 @@
                                 <tbody>
                                     <tr v-for="t in transactionsForSelectedParty">
                                         <td class="tr p-2">{{ t.number }}.</td>
+                                        <td class="p-2 wp-1 wsnw">{{ t.type }}</td>
                                         <td class="p-2">{{ t.formattedDate }}</td>
                                         <td class="tr p-2 wp-1 wsnw">{{ t.formattedTotalAmount }}</td>
                                         <td class="tr p-2 wp-1 wsnw">{{ t.formattedPaid }}</td>
@@ -262,10 +270,12 @@
                                                         <input type="text" class="numeric w-100 p-2"
                                                             v-model="transactionItem.quantity" maxlength="4" />
                                                     </td>
-                                                    <td class="p-2 wsnw bb-1 tr br-1">{{ transactionItem.formattedTotal }}
+                                                    <td class="p-2 wsnw bb-1 tr br-1">{{ transactionItem.formattedTotal
+                                                        }}
                                                     </td>
                                                     <th class="bb-1 p-2">
-                                                        <a href="#" @click="removeItemFromSale(transactionItem)">&times;</a>
+                                                        <a href="#"
+                                                            @click="removeItemFromSale(transactionItem)">&times;</a>
                                                     </th>
                                                 </tr>
                                             </tbody>
@@ -319,13 +329,12 @@
                     </div>
                 </div>
                 <div class="df fr jce">
-                    <a v-if="showGenerateSaleButton"
-                         href="#" class="p-2" @click="generateSaleReceipt">Generate</a>
+                    <a v-if="showGenerateSaleButton" href="#" class="p-2" @click="generateSaleReceipt">Generate</a>
                 </div>
             </div>
             <!-- Receipt -->
             <div :class="{'d-none': tabIndex != 6}" class="df fc h-100">
-                
+
             </div>
         </div>
     </div>

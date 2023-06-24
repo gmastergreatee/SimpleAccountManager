@@ -6,4 +6,13 @@ export class Utils {
         }
         return temp;
     }
+    static ExportPNG(node, imageName = 'image.png') {
+        domtoimage.toPng(node, { quality: 0.95 })
+            .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = imageName;
+                link.href = dataUrl;
+                link.click();
+            });
+    }
 }

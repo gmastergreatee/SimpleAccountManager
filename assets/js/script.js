@@ -89,6 +89,9 @@ let app = new Vue({
         selectParty(party) {
             this.selectedParty = party;
         },
+        exportTransactions() {
+            Utils.ExportPNG($('#party-transactions')[0]);
+        },
         //#endregion
 
         //#region Item related
