@@ -54,6 +54,10 @@ let app = new Vue({
             }
             this.tabIndex = index;
             switch (this.tabIndex) {
+                case 3:
+                    this.addPartyInit();
+                case 4:
+                    this.addItemInit();
                 case 5:
                     this.addSaleInit();
                     break;
@@ -65,6 +69,11 @@ let app = new Vue({
         },
 
         //#region Party related
+        addPartyInit() {
+            if (this.newParty.id == '') {
+                this.newParty = new Party();
+            }
+        },
         saveParty() {
             if (!this.newParty.IsValid) {
                 return;
@@ -83,6 +92,11 @@ let app = new Vue({
         //#endregion
 
         //#region Item related
+        addItemInit() {
+            if (this.newItem.id == '') {
+                this.newItem = new Item();
+            }
+        },
         saveItem() {
             if (!this.newItem.IsValid) {
                 return;
@@ -141,9 +155,9 @@ let app = new Vue({
                 this.nextTransactionId,
             );
             this.selectedPartyForAddSale.balance = transaction.party.balance;
-            console.log(transaction);
             this.transactions.push(transaction);
             this.nextTransactionId++;
+
             Store.setData('transactions', JSON.stringify(this.transactions));
             Store.setData('parties', JSON.stringify(this.parties));
 
