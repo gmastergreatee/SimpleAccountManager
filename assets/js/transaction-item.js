@@ -1,5 +1,6 @@
 import { BaseClass } from "./common.js";
 import { Item } from "./item.js";
+import { Utils } from "./utils.js";
 
 export class TransactionItem extends BaseClass {
     constructor() {
@@ -36,6 +37,6 @@ export class TransactionItem extends BaseClass {
     }
 
     get formattedTotal() {
-        return `₹ ${this.total.toFixed(2)}`;
+        return Utils.FormatCurrency(this.total);
     }
 }

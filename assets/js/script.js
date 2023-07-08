@@ -18,9 +18,11 @@ let app = new Vue({
                 'Items',
             ],
 
+            // initial data
             newParty: new Party(),
             newItem: new Item(),
 
+            // data store
             items: [],
             selectedItem: null,
 
@@ -30,22 +32,31 @@ let app = new Vue({
             transactions: [],
             nextTransactionId: 1,
 
+            // for navigation
             tabIndex: 0,
             majorTabIndex: 0,
             fullscreenView: false,
 
+            // for transaction generation
             selectedPartyForAddSale: null,
             itemsForAddSale: [],
             receivedAmountForSale: 0,
             dateForAddSale: '',
 
+            // for receipt display
             selectedTransaction: null,
+
+            // for taking balance
+            selectedPartyForBalance: null,
+            balanceInput: '',
+            finalBalance: '',
         };
     },
     methods: {
         debugCode() {
-            this.setTabIndex(6, true);
-            this.selectedTransaction = this.transactions[0];
+            // this.setTabIndex(6, true);
+            // this.selectedTransaction = this.transactions[0];
+            this.takeBalance(this.parties[0]);
         },
         setTabIndex(index, fs = false) {
             if (fs) {
@@ -181,17 +192,32 @@ let app = new Vue({
             Utils.ExportPNG($('#transaction-receipt')[0]);
         },
         //#endregion
+
+        //#region Take Balance
+        takeBalance(selectedParty) {
+            this.selectedPartyForBalance = selectedParty;
+            this.finalBalance = selectedParty.balance;
+            this.setTabIndex(7, true);
+        },
+        balanceInputChanged() {
+            let balance = parseFloat(this.balanceInput);
+            if (isNaN(balance)) {
+                balance = 0;
+            }
+            this.finalBalance = this.selectedPartyForBalance.balance - balance;
+        }
+        //#endregion
     },
     computed: {
         totalForAddSale() {
             return this.itemsForAddSale.reduce((a, b) => { a += b.total; return a; }, 0);
         },
         totalForAddSaleFormatted() {
-            return `₹ ${this.totalForAddSale.toFixed(2)}`;
+            return Utils.FormatCurrency(this.totalForAddSale);
         },
         dueForAddSale() {
             let recAmt = parseFloat(this.receivedAmountForSale);
-            return `₹ ${isNaN(recAmt) ? 0 : (this.totalForAddSale - recAmt)}`;
+            return Utils.FormatCurrency(isNaN(recAmt) ? 0 : (this.totalForAddSale - recAmt));
         },
         showGenerateSaleButton() {
             return this.itemsForAddSale.length > 0 &&

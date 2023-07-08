@@ -31,7 +31,7 @@
     <div id="vuejify" class="df fr h-100" v-cloak>
         <!-- Sidebar -->
         <div class="df fc br-1" :class="{'d-none': fullscreenView}">
-            <div class="header p-2 bb-1">SK Albums</div>
+            <div class="header p-2 bb-1 wsnw">SK Albums</div>
             <a href="#" v-for="(m,i) in menus" class="p-2 bb-1" @click="setTabIndex(i)"
                 :class="{'cy': tabIndex == i}">{{ m }}</a>
         </div>
@@ -71,12 +71,13 @@
                             <div><b>Phone :</b> {{ selectedParty.phone }}</div>
                             <div class="pb-2"><b>Email Id :</b> {{ selectedParty.email }}</div>
                         </div>
-                        <div>
+                        <div class="df fc aife">
                             <a href="#" @click="exportTransactions">Export</a>
+                            <a href="#" v-if="selectedParty.balance > 0" @click="takeBalance(selectedParty)">Take balance</a>
                         </div>
                     </div>
                     <div class="df f1 fc px-2 pb-2">
-                        <h3 class="m-0 bb-1 pb-2">Transactions</h3>
+                        <h3 class="m-0 bb-1 pb-2 mb-2">Transactions</h3>
                         <div class="f1">
                             <table v-if="transactionsForSelectedParty.length > 0" class="w-100" border="1"
                                 cellspacing="0" cellpadding="0">
@@ -407,6 +408,37 @@
                 <div class="tc p-2">
                     <a href="#" @click="exportReceipt">Export</a>
                     <a href="#" class="ml-2" @click="backClick">Back</a>
+                </div>
+            </div>
+            <!-- Balance -->
+            <div :class="{'d-none': tabIndex != 7}" class="df fc h-100">
+                <div class="p-2 bb-1 df fr jcsb aic">
+                    <h2 class="m-0">Take Balance</h2>
+                    <a href="#" @click="backClick">Back</a>
+                </div>
+                <div v-if="selectedPartyForBalance" class="p-2 df fc bb-1">
+                    <div><b>Name :</b> {{ selectedPartyForBalance.name }}</div>
+                    <div><b>Phone :</b> {{ selectedPartyForBalance.phone }}</div>
+                    <div><b>Email Id :</b> {{ selectedPartyForBalance.email }}</div>
+                </div>
+                <div class="f1 df fr jcfe bb-1">
+                    <div class="bl-1 df fc">
+                        <div class="df fr aic p-2 bb-1">
+                            <div class="pr-2">Current Balance :</div>
+                            <div class="f1 tr">{{ selectedPartyForBalance.formattedBalance }}</div>
+                        </div>
+                        <div class="df fr aic p-2 bb-1">
+                            <div class="pr-2">Received Amount :</div>
+                            <input type="text" class="numeric tr" v-model="balanceInput" @input="balanceInputChanged" maxlength="10" />
+                        </div>
+                        <div class="df fr aic p-2 bb-1">
+                            <div class="pr-2">Final Balance :</div>
+                            <div class="f1 tr">{{ formatCurrency(finalBalance) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="df fr jcfe" :class="{'d-none': finalBalance == selectedPartyForBalance.balance }">
+                    <a href="#" class="m-2">Generate Receipt</a>
                 </div>
             </div>
         </div>

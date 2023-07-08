@@ -39,3 +39,11 @@
 .aic {
     align-items: center;
 }
+
+.aife {
+    align-items: flex-end;
+}
+
+.jcfe {
+    justify-content: flex-end;
+}

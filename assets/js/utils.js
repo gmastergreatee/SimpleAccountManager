@@ -20,6 +20,10 @@ export class Utils {
         if (isNaN(num)) {
             num = 0;
         }
-        return `₹ ${num.toFixed(2)}`;
+        return num.toLocaleString('en-IN', {
+            maximumFractionDigits: 2,
+            style: 'currency',
+            currency: 'INR'
+        });
     }
 }
