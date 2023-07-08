@@ -1,4 +1,5 @@
 import { BaseClass } from "./common.js";
+import { Utils } from "./utils.js";
 
 
 export class Party extends BaseClass {
@@ -35,7 +36,7 @@ export class Party extends BaseClass {
     }
 
     get formattedBalance() {
-        return `₹ ${this.balance.toFixed(2)}`;
+        return Utils.FormatCurrency(this.balance);
     }
 
     static CopyFrom(party) {

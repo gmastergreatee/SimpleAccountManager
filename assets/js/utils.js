@@ -15,4 +15,11 @@ export class Utils {
                 link.click();
             });
     }
+    static FormatCurrency(number) {
+        let num = parseFloat(number);
+        if (isNaN(num)) {
+            num = 0;
+        }
+        return `₹ ${num.toFixed(2)}`;
+    }
 }

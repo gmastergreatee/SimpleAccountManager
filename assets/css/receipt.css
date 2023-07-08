@@ -1,0 +1,18 @@
+.receipt th,
+.receipt td {
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.receipt thead th {
+    border-top: 1px solid black;
+}
+
+.receipt tr>th:last-child,
+.receipt tr>td:last-child {
+    border-right: 1px solid black;
+}
+
+.receipt .b-0 {
+    border: 0;
+}

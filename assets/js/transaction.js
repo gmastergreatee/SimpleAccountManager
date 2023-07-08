@@ -16,6 +16,13 @@ export class Transaction extends BaseClass {
         this.due = 0;
     }
 
+    get totalItemCount() {
+        return this.items.map(i => i.quantity)
+            .reduce((a, b) => {
+                return a + parseFloat(b);
+            }, 0);
+    }
+
     get totalAmount() {
         return this.items.reduce((a, b) => {
             return a + b.item.price;
@@ -23,15 +30,15 @@ export class Transaction extends BaseClass {
     }
 
     get formattedTotalAmount() {
-        return `₹ ${this.totalAmount.toFixed(2)}`;
+        return Utils.FormatCurrency(this.totalAmount);
     }
 
     get formattedPaid() {
-        return `₹ ${this.received.toFixed(2)}`;
+        return Utils.FormatCurrency(this.received);
     }
 
     get formattedDue() {
-        return `₹ ${this.due.toFixed(2)}`;
+        return Utils.FormatCurrency(this.due);
     }
 
     get formattedDate() {

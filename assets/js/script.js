@@ -38,12 +38,14 @@ let app = new Vue({
             itemsForAddSale: [],
             receivedAmountForSale: 0,
             dateForAddSale: '',
+
+            selectedTransaction: null,
         };
     },
     methods: {
         debugCode() {
-            this.tabIndex = 1;
-            this.selectedParty = this.parties[0];
+            this.setTabIndex(6, true);
+            this.selectedTransaction = this.transactions[0];
         },
         setTabIndex(index, fs = false) {
             if (fs) {
@@ -66,6 +68,13 @@ let app = new Vue({
         backClick() {
             this.tabIndex = this.majorTabIndex;
             this.fullscreenView = false;
+        },
+        formatCurrency(num) {
+            return Utils.FormatCurrency(num);
+        },
+        showReceipt(transaction) {
+            this.selectedTransaction = transaction;
+            this.setTabIndex(6, true);
         },
 
         //#region Party related
@@ -166,8 +175,10 @@ let app = new Vue({
 
             this.majorTabIndex = 1;
             this.selectedParty = this.selectedPartyForAddSale;
-
-            this.backClick();
+            this.showReceipt(transaction);
+        },
+        exportReceipt() {
+            Utils.ExportPNG($('#transaction-receipt')[0]);
         },
         //#endregion
     },
