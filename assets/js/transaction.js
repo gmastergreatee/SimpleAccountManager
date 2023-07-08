@@ -12,6 +12,7 @@ export class Transaction extends BaseClass {
         this.date = '';
         this.party = null;
         this.items = [];
+        this.balance = 0;
         this.received = 0;
         this.due = 0;
     }
@@ -24,6 +25,9 @@ export class Transaction extends BaseClass {
     }
 
     get totalAmount() {
+        if (this.type != 'Sale') {
+            return this.balance;
+        }
         return this.items.reduce((a, b) => {
             return a + b.item.price;
         }, 0);
@@ -43,10 +47,10 @@ export class Transaction extends BaseClass {
 
     get formattedDate() {
         let curDate = new Date(this.date);
-        return `${Utils.PadLeft(curDate.getDate(), 2, '0')}-${Utils.PadLeft(curDate.getMonth() + 1, 2, '0')}-${curDate.getFullYear()}`
+        return Utils.FormatDate(curDate);
     }
 
-    static From(date, party, items, received, type, receiptNo) {
+    static From(date, party, items, received, type, receiptNo, balance = 0) {
         let transaction = new Transaction();
         transaction.id = this.GetId;
         transaction.type = type;
@@ -54,13 +58,18 @@ export class Transaction extends BaseClass {
         transaction.date = date;
         transaction.party = Party.CopyFrom(party);
         transaction.items = TransactionItem.CopyAllFrom(items);
+        transaction.balance = balance;
         transaction.received = received;
-        transaction.due = items.map((a) => {
-            return parseFloat(a.quantity) * parseFloat(a.item.price);
-        }).reduce((a, b) => {
-            a += b;
-            return a;
-        }, 0) - received;
+        let total = balance;
+        if (items && items.length > 0) {
+            total = items.map((a) => {
+                return parseFloat(a.quantity) * parseFloat(a.item.price);
+            }).reduce((a, b) => {
+                a += b;
+                return a;
+            }, 0)
+        }
+        transaction.due = total - received;
         transaction.party.balance += transaction.due;
         return transaction;
     }
@@ -74,6 +83,7 @@ export class Transaction extends BaseClass {
             transactionCopy.date = transaction.date;
             transactionCopy.party = Party.CopyFrom(transaction.party);
             transactionCopy.items = TransactionItem.CopyAllFrom(transaction.items);
+            transactionCopy.balance = transaction.balance;
             transactionCopy.received = transaction.received;
             transactionCopy.due = transaction.due;
         }

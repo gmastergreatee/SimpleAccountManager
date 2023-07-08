@@ -54,9 +54,8 @@ let app = new Vue({
     },
     methods: {
         debugCode() {
+            // this.selectedTransaction = this.transactions[2];
             // this.setTabIndex(6, true);
-            // this.selectedTransaction = this.transactions[0];
-            this.takeBalance(this.parties[0]);
         },
         setTabIndex(index, fs = false) {
             if (fs) {
@@ -205,7 +204,28 @@ let app = new Vue({
                 balance = 0;
             }
             this.finalBalance = this.selectedPartyForBalance.balance - balance;
-        }
+        },
+        generateBalanceReceipt() {
+            let transaction = Transaction.From(
+                Utils.FormatDateISO(new Date()),
+                this.selectedPartyForBalance,
+                null,
+                parseFloat(this.balanceInput),
+                'Balance',
+                this.nextTransactionId,
+                this.selectedPartyForBalance.balance
+            );
+            this.selectedPartyForBalance.balance = transaction.party.balance;
+            this.transactions.push(transaction);
+            this.nextTransactionId++;
+
+            Store.setData('transactions', JSON.stringify(this.transactions));
+            Store.setData('parties', JSON.stringify(this.parties));
+
+            this.majorTabIndex = 1;
+            this.selectedParty = this.selectedPartyForBalance;
+            this.showReceipt(transaction);
+        },
         //#endregion
     },
     computed: {

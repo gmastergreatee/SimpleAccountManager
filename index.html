@@ -350,7 +350,7 @@
                             <div>Date: {{ selectedTransaction.formattedDate }}</div>
                         </div>
                         <div>
-                            <table class="w-100 receipt" cellspacing="0" cellpadding="0">
+                            <table v-if="selectedTransaction.type == 'Sale'" class="w-100 receipt" cellspacing="0" cellpadding="0">
                                 <thead>
                                     <tr>
                                         <th class="p-1">#</th>
@@ -401,6 +401,28 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <table v-else class="w-100 receipt" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th class="p-1">Particulars</th>
+                                        <th class="p-1">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-1">Balance</td>
+                                        <td class="p-1 tr">{{ selectedTransaction.formattedTotalAmount }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-1">Received</td>
+                                        <td class="p-1 tr">{{ selectedTransaction.formattedPaid }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-1">Final Balance</td>
+                                        <td class="p-1 tr">{{ selectedTransaction.formattedDue }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <img class="w-100" src="assets/images/bill-bottom.png" alt="Bill Bottom Image" />
@@ -416,29 +438,31 @@
                     <h2 class="m-0">Take Balance</h2>
                     <a href="#" @click="backClick">Back</a>
                 </div>
-                <div v-if="selectedPartyForBalance" class="p-2 df fc bb-1">
-                    <div><b>Name :</b> {{ selectedPartyForBalance.name }}</div>
-                    <div><b>Phone :</b> {{ selectedPartyForBalance.phone }}</div>
-                    <div><b>Email Id :</b> {{ selectedPartyForBalance.email }}</div>
-                </div>
-                <div class="f1 df fr jcfe bb-1">
-                    <div class="bl-1 df fc">
-                        <div class="df fr aic p-2 bb-1">
-                            <div class="pr-2">Current Balance :</div>
-                            <div class="f1 tr">{{ selectedPartyForBalance.formattedBalance }}</div>
-                        </div>
-                        <div class="df fr aic p-2 bb-1">
-                            <div class="pr-2">Received Amount :</div>
-                            <input type="text" class="numeric tr" v-model="balanceInput" @input="balanceInputChanged" maxlength="10" />
-                        </div>
-                        <div class="df fr aic p-2 bb-1">
-                            <div class="pr-2">Final Balance :</div>
-                            <div class="f1 tr">{{ formatCurrency(finalBalance) }}</div>
+                <div v-if="selectedPartyForBalance" class="f1 df fc">
+                    <div class="p-2 df fc bb-1">
+                        <div><b>Name :</b> {{ selectedPartyForBalance.name }}</div>
+                        <div><b>Phone :</b> {{ selectedPartyForBalance.phone }}</div>
+                        <div><b>Email Id :</b> {{ selectedPartyForBalance.email }}</div>
+                    </div>
+                    <div class="f1 df fr jcfe bb-1">
+                        <div class="bl-1 df fc">
+                            <div class="df fr aic p-2 bb-1">
+                                <div class="pr-2">Current Balance :</div>
+                                <div class="f1 tr">{{ selectedPartyForBalance.formattedBalance }}</div>
+                            </div>
+                            <div class="df fr aic p-2 bb-1">
+                                <div class="pr-2">Received Amount :</div>
+                                <input type="text" class="numeric tr" v-model="balanceInput" @input="balanceInputChanged" maxlength="10" />
+                            </div>
+                            <div class="df fr aic p-2 bb-1">
+                                <div class="pr-2">Final Balance :</div>
+                                <div class="f1 tr">{{ formatCurrency(finalBalance) }}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="df fr jcfe" :class="{'d-none': finalBalance == selectedPartyForBalance.balance }">
-                    <a href="#" class="m-2">Generate Receipt</a>
+                    <div class="df fr jcfe" :class="{'d-none': finalBalance == selectedPartyForBalance.balance }">
+                        <a href="#" class="m-2" @click="generateBalanceReceipt">Generate Receipt</a>
+                    </div>
                 </div>
             </div>
         </div>

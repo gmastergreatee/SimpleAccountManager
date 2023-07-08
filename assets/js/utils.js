@@ -26,4 +26,18 @@ export class Utils {
             currency: 'INR'
         });
     }
+    static FormatDate(date) {
+        let curDate = date;
+        if (!curDate) {
+            curDate = new Date();
+        }
+        return `${Utils.PadLeft(curDate.getDate(), 2, '0')}-${Utils.PadLeft(curDate.getMonth() + 1, 2, '0')}-${curDate.getFullYear()}`
+    }
+    static FormatDateISO(date) {
+        let curDate = date;
+        if (!curDate) {
+            curDate = new Date();
+        }
+        return `${curDate.getFullYear()}-${Utils.PadLeft(curDate.getMonth() + 1, 2, '0')}-${Utils.PadLeft(curDate.getDate(), 2, '0')}`
+    }
 }
