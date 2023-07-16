@@ -6,25 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Accounting</title>
-    <link rel="stylesheet" href="/assets/css/scroll.css">
-    <link rel="stylesheet" href="assets/css/display.css">
-    <link rel="stylesheet" href="assets/css/border.css">
-    <link rel="stylesheet" href="assets/css/input.css">
-    <link rel="stylesheet" href="assets/css/margin.css">
-    <link rel="stylesheet" href="assets/css/padding.css">
-    <link rel="stylesheet" href="assets/css/position.css">
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel="stylesheet" href="/assets/css/receipt.css">
+    <link rel="stylesheet" href="./assets/css/scroll.css">
+    <link rel="stylesheet" href="./assets/css/display.css">
+    <link rel="stylesheet" href="./assets/css/border.css">
+    <link rel="stylesheet" href="./assets/css/input.css">
+    <link rel="stylesheet" href="./assets/css/margin.css">
+    <link rel="stylesheet" href="./assets/css/padding.css">
+    <link rel="stylesheet" href="./assets/css/position.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/receipt.css">
 
-    <script src="assets/js/vue.js"></script>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/dom-to-image.min.js"></script>
+    <script src="./assets/js/vue.js"></script>
+    <script src="./assets/js/jquery.min.js"></script>
+    <script src="./assets/js/dom-to-image.min.js"></script>
 
-    <script type="module" src="assets/js/utils.js" defer></script>
-    <script type="module" src="assets/js/party.js" defer></script>
-    <script type="module" src="assets/js/transaction.js" defer></script>
-    <script type="module" src="assets/js/item.js" defer></script>
-    <script type="module" src="assets/js/script.js" defer></script>
+    <script type="module" src="./assets/js/utils.js" defer></script>
+    <script type="module" src="./assets/js/party.js" defer></script>
+    <script type="module" src="./assets/js/transaction.js" defer></script>
+    <script type="module" src="./assets/js/item.js" defer></script>
+    <script type="module" src="./assets/js/script.js" defer></script>
 </head>
 
 <body class="w-100 h-100 m-0">
@@ -283,12 +283,14 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Total</th>
+                                                    <th colspan="2"></th>
+                                                    <th colspan="2" class="tl p-2 bb-1 br-1">Total</th>
                                                     <th class="bb-1 p-2 tr br-1">{{ totalForAddSaleFormatted }}</th>
                                                     <th class="bb-1"></th>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Received</th>
+                                                    <th colspan="2"></th>
+                                                    <th colspan="2" class="tl p-2 bb-1 br-1">Received</th>
                                                     <th class="bb-1 tr">
                                                         <input class="numeric w-60 tr p-2 br-1"
                                                             v-model="receivedAmountForSale"
@@ -297,7 +299,8 @@
                                                     <th class="bb-1"></th>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="4" class="tl p-2 bb-1 br-1">Due</th>
+                                                    <th colspan="2"></th>
+                                                    <th colspan="2" class="tl p-2 bb-1 br-1">Due</th>
                                                     <th class="bb-1 p-2 tr br-1">
                                                         {{ dueForAddSale }}
                                                     </th>
@@ -336,7 +339,7 @@
             </div>
             <!-- Receipt -->
             <div :class="{'d-none': tabIndex != 6}" class="df fc h-100 aic">
-                <div v-if="selectedTransaction" class="df fc bc-w a4-width" id="transaction-receipt">
+                <div v-if="selectedTransaction" class="df fc bc-w a4-width receipt" id="transaction-receipt">
                     <img class="w-100" src="assets/images/bill-top.png" alt="Bill Top Image" />
                     <div class="f1 pr df fc py-2 px-3">
                         <div>Bill To:</div>
@@ -350,7 +353,7 @@
                             <div>Date: {{ selectedTransaction.formattedDate }}</div>
                         </div>
                         <div>
-                            <table v-if="selectedTransaction.type == 'Sale'" class="w-100 receipt" cellspacing="0" cellpadding="0">
+                            <table v-if="selectedTransaction.type == 'Sale'" class="w-100" cellspacing="0" cellpadding="0">
                                 <thead>
                                     <tr>
                                         <th class="p-1">#</th>
@@ -401,7 +404,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <table v-else class="w-100 receipt" cellspacing="0" cellpadding="0">
+                            <table v-else class="w-100" cellspacing="0" cellpadding="0">
                                 <thead>
                                     <tr>
                                         <th class="p-1">Particulars</th>
